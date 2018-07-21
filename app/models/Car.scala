@@ -14,14 +14,17 @@ case class Car(
                 price: Int,
                 used: Boolean,
                 mileage: Option[Int],
-                firstRegistration: Date
+                firstRegistration: Option[Date]
               )
 
 object Car {
   implicit val jsonFormat = Json.format[Car]
 
-  implicit val userValidator: Validator[Car] = validator[Car] { u =>
+  implicit val carValidator: Validator[Car] = validator[Car] { u =>
     u.title as "Title" is notBlank
+    u.price as "Price" should be > 0
+    (u.used as "isUsed" is false) or (u.mileage as "Mileage" is notEmpty)
+    (u.used as "isUsed" is false) or (u.firstRegistration is notEmpty)
     ()
   }
 }
