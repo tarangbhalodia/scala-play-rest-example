@@ -4,17 +4,19 @@ import java.util.{Date, UUID}
 
 import com.wix.accord._
 import com.wix.accord.dsl._
+import io.swagger.annotations._
 import play.api.libs.json._
 import json.Implicits._
 
+@ApiModel
 case class Car(
                 id: UUID,
                 title: String,
-                fuel: FuelType,
+                @ApiModelProperty(value = "Mileage for used cars", dataType = "String", example = "Gasoline, Diesel") fuel: FuelType,
                 price: Int,
                 used: Boolean,
-                mileage: Option[Int],
-                firstRegistration: Option[Date]
+                @ApiModelProperty(value = "Mileage for used cars", dataType = "Integer") mileage: Option[Int],
+                @ApiModelProperty(value = "First registration date for used cars", dataType = "Date") firstRegistration: Option[Date]
               )
 
 object Car {

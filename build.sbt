@@ -11,16 +11,19 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 routesGenerator := InjectedRoutesGenerator
 libraryDependencies ++= Seq(
 
-  // validator library
-  "com.wix" %% "accord-core" % "0.7.2",
+  //validator library
+  "com.wix" %% "accord-core" % Dependencies.wixAccordVersion,
 
   //swagger
-  "io.swagger" %% "swagger-play2" % "1.5.0",
-  "org.webjars" % "swagger-ui" % "2.2.0",
+  "io.swagger" %% "swagger-play2" % Dependencies.swaggerPlayVersion,
+  "org.webjars" % "swagger-ui" % Dependencies.swaggerUIVersion,
+
+  //elastic4s
+  "com.sksamuel.elastic4s" %% "elastic4s-http" % Dependencies.elastic4sVersion,
 
   //json decoder
   "org.julienrf" %% "play-json-derived-codecs" % "3.0",
 
   //test
-  "org.scalatestplus" %% "play" % "1.4.0" % Test
+  "org.scalatestplus" %% "play" % Dependencies.testPlusPlayVersion % Test
 )
