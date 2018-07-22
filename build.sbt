@@ -8,6 +8,8 @@ scalaVersion := "2.11.6"
 // The Play project itself
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
+enablePlugins(PlayScala)
+
 routesGenerator := InjectedRoutesGenerator
 libraryDependencies ++= Seq(
 
@@ -26,5 +28,6 @@ libraryDependencies ++= Seq(
   "org.julienrf" %% "play-json-derived-codecs" % "3.0",
 
   //test
-  "org.scalatestplus" %% "play" % Dependencies.testPlusPlayVersion % Test
+  "org.scalatestplus" %% "play" % Dependencies.testPlusPlayVersion % Test,
+  "com.github.javafaker"    % "javafaker"          % "0.15"  % Test
 )

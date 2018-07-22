@@ -1,9 +1,10 @@
-package models
+package scala.models
 
 import java.util.{Date, UUID}
 
-import org.scalatest._
 import com.wix.accord._
+import models.{Car, Diesel}
+import org.scalatest._
 
 class CarValidationSpec extends FlatSpec {
   implicit val validator = Car.carValidator
