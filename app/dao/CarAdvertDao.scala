@@ -54,7 +54,7 @@ class CarAdvertDao @Inject()(elasticsearch: ElasticsearchHttpClient)
     } yield result
   }
 
-  def remove(id: UUID): Future[Unit] = {
+  def remove(id: UUID): Future[Boolean] = {
     for {
       result <- elasticsearch.execute(
         delete(id.toString).from(Car.indexName / "entry")
@@ -66,6 +66,7 @@ class CarAdvertDao @Inject()(elasticsearch: ElasticsearchHttpClient)
         case Right(response) =>
           val result = response.result.result
           logger.info(s"car: $id delete response: $result")
+          true
       }
     } yield {
       logger.info(s"successfully deleted car: $id")

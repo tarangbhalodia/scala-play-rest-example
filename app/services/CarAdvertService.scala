@@ -40,5 +40,5 @@ class CarAdvertService @Inject()(dao: CarAdvertDao)(implicit executionContext: E
 
   def findById(id: UUID): Future[Option[Car]] = dao.findById(id)
 
-  def remove(id: UUID): Future[Unit] = dao.remove(id)
+  def remove(id: UUID): Future[Boolean] = dao.remove(id)
 }
