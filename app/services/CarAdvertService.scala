@@ -1,23 +1,44 @@
 package services
 
-import java.util.{Date, UUID}
+import java.util.UUID
 
-import models.{Car, Diesel}
+import com.wix.accord._
+import dao.CarAdvertDao
+import javax.inject.Inject
+import models.{Car, PageResult}
+import play.api.Logger
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class CarAdvertService {
+class CarAdvertService @Inject()(dao: CarAdvertDao)(implicit executionContext: ExecutionContext) {
 
-  def getAllCars: Future[List[Car]] = {
-    val car = Car(
-      id = UUID.randomUUID(),
-      title = "Safari Storme",
-      fuel = Diesel,
-      price = 100000,
-      used = false,
-      mileage = None,
-      firstRegistration = Some(new Date())
-    )
-    Future.successful(List(car))
+  val logger = Logger(this.getClass)
+
+  def getAllCars(from: Int, pageSize: Int, sortField: String, sortOrder: String): Future[PageResult] = {
+    dao.getAll(from, pageSize, sortField, sortOrder)
   }
+
+  def insert(car: Car)
+            (implicit validator: Validator[Car]): Future[Car] = {
+
+    val validationResult = validate(car)
+    if (validationResult.isFailure) {
+      val violations = validationResult.toFailure.get.violations
+      logger.info(s"invalid car details: ${violations.mkString(", ")}")
+      return Future.failed(new AssertionError(violations.mkString(", ")))
+    }
+    dao.upsert(car)
+  }
+
+  def update(car: Car, id: UUID)(implicit validator: Validator[Car]): Future[Option[Car]] = {
+    val result = findById(id).flatMap {
+      case None => Future.successful(None)
+      case Some(_) => insert(car.copy(id = Some(id))).map(r => Some(r))
+    }
+    result
+  }
+
+  def findById(id: UUID): Future[Option[Car]] = dao.findById(id)
+
+  def remove(id: UUID): Future[Unit] = dao.remove(id)
 }

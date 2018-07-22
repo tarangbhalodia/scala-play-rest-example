@@ -20,6 +20,7 @@ libraryDependencies ++= Seq(
 
   //elastic4s
   "com.sksamuel.elastic4s" %% "elastic4s-http" % Dependencies.elastic4sVersion,
+  "com.sksamuel.elastic4s" %% "elastic4s-play-json" % Dependencies.elastic4sVersion,
 
   //json decoder
   "org.julienrf" %% "play-json-derived-codecs" % "3.0",

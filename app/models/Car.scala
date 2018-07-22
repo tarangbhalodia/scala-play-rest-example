@@ -10,17 +10,20 @@ import json.Implicits._
 
 @ApiModel
 case class Car(
-                id: UUID,
+                @ApiModelProperty(value = "Unique id for car", required = false, dataType = "String") id: Option[UUID],
                 title: String,
                 @ApiModelProperty(value = "Mileage for used cars", dataType = "String", example = "Gasoline, Diesel") fuel: FuelType,
                 price: Int,
                 used: Boolean,
                 @ApiModelProperty(value = "Mileage for used cars", dataType = "Integer") mileage: Option[Int],
                 @ApiModelProperty(value = "First registration date for used cars", dataType = "Date") firstRegistration: Option[Date]
-              )
+              ) {
+  val encodedId: UUID = id.getOrElse(UUID.randomUUID())
+}
 
 object Car {
-  implicit val jsonFormat = Json.format[Car]
+  lazy val indexName = "cars"
+  implicit val jsonFormat: OFormat[Car] = Json.format[Car]
 
   implicit val carValidator: Validator[Car] = validator[Car] { u =>
     u.title as "Title" is notBlank

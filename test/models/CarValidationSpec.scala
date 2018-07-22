@@ -10,7 +10,7 @@ class CarValidationSpec extends FlatSpec {
 
   "A car " should " contain non-empty title" in {
     val car = Car(
-      id = UUID.randomUUID(),
+      id = Some(UUID.randomUUID()),
       title = "",
       fuel = Diesel,
       price = 100000,
@@ -25,7 +25,7 @@ class CarValidationSpec extends FlatSpec {
 
   it should " contain price greater than 0" in {
     val car = Car(
-      id = UUID.randomUUID(),
+      id = Some(UUID.randomUUID()),
       title = "Test car",
       fuel = Diesel,
       price = 0,
@@ -40,7 +40,7 @@ class CarValidationSpec extends FlatSpec {
 
   "A used car" should "contain non-empty mileage" in {
     val car = Car(
-      id = UUID.randomUUID(),
+      id = Some(UUID.randomUUID()),
       title = "Test car",
       fuel = Diesel,
       price = 10000,
@@ -55,7 +55,7 @@ class CarValidationSpec extends FlatSpec {
 
   it should "contain non-empty firstRegistration" in {
     val car = Car(
-      id = UUID.randomUUID(),
+      id = Some(UUID.randomUUID()),
       title = "Test car",
       fuel = Diesel,
       price = 10000,

@@ -4,7 +4,10 @@ import play.api.libs.json._
 
 case class PageResult(
                        cars: List[Car],
-                       size: Int
+                       pageSize: Int,
+                       totalResult: Long,
+                       pageNumber: Int,
+                       totalPages: Int
                      )
 
 object PageResult {
