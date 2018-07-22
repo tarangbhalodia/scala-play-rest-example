@@ -9,6 +9,8 @@ import play.api.Configuration
 
 class ElasticsearchHttpClient @Inject()(configuration: Configuration) extends HttpClient {
 
+  val refresh = configuration.getBoolean("elasticsearch.refresh").getOrElse(false)
+
   private val httpClient = {
     val esUrl = new URI(configuration.getString("elasticsearch.url").get)
     val esHost = esUrl.getHost

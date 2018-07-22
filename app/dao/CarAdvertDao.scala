@@ -20,10 +20,18 @@ class CarAdvertDao @Inject()(elasticsearch: ElasticsearchHttpClient)
   def upsert(carModel: Car): Future[Car] = {
     val target = carModel.copy(id = Some(carModel.encodedId))
     for {
-      result <- elasticsearch.execute {
+      result <- if (elasticsearch.refresh) elasticsearch.execute {
         indexInto(Car.indexName / "entry")
         .id(target.encodedId.toString)
         .doc(carModel)
+        .refreshImmediately
+      }
+      else {
+        elasticsearch.execute {
+          indexInto(Car.indexName / "entry")
+          .id(target.encodedId.toString)
+          .doc(carModel)
+        }
       }
     } yield {
       logger.info(s"car: ${target.title} upserted successfully with id: ${target.encodedId.toString}")
@@ -74,7 +82,7 @@ class CarAdvertDao @Inject()(elasticsearch: ElasticsearchHttpClient)
     elasticsearch
     .execute {
       searchWithType(Car.indexName / "entry")
-      .from((from-1) * pageSize)
+      .from((from - 1) * pageSize)
       .size(pageSize)
       .sortBy(FieldSortDefinition(sortField + ".sort-field").order(order))
     }
