@@ -16,14 +16,13 @@ import scala.concurrent.ExecutionException
 class CarAdvertController @Inject()(carAdvertService: CarAdvertService) extends BaseController {
 
   @ApiResponses(Array(
-    new ApiResponse(code = 404, message = "No cars found"),
     new ApiResponse(code = 200, message = "Cars found", response = classOf[PageResult])
   ))
   @ApiOperation("get all cars")
   def getAllCars(pageNumber: Int,
                  pageSize: Int,
                  sortField: String,
-                 sortOrder: String): Action[AnyContent] = Action.async { implicit request =>
+                 @ApiParam(name = "sortOrder", defaultValue = "asc", allowableValues = "desc") sortOrder: String): Action[AnyContent] = Action.async { implicit request =>
     val cars = carAdvertService.getAllCars(pageNumber, pageSize, sortField, sortOrder)
     cars.map {
       result => Ok(Json.toJson(result))
